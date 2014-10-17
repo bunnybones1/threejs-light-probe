@@ -1,0 +1,37 @@
+{
+  "name": "threejs-light-probe",
+  "version": "1.0.0",
+  "description": "A convenient camera probe to generate cubemaps for reflections during runtime.",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Tomasz Dysinski",
+    "email": "oz@bunnybones.com",
+    "url": "https://github.com/bunnybones1"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "loadandrunscripts": "^1.0.0",
+    "threejs-managed-view": "^1.0.4",
+    "threejs-orbitingballs": "^1.0.1",
+    "threejs-texture-checkerboard": "^1.0.0",
+    "urlparams": "^1.0.0"
+  },
+  "scripts": {
+    "test": "beefy test.js --live --open"
+  },
+  "keywords": [
+    "threejs",
+    "reflection",
+    "cubemap",
+    "camera"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bunnybones1/threejs-light-probe.git"
+  },
+  "homepage": "https://github.com/bunnybones1/threejs-light-probe",
+  "bugs": {
+    "url": "https://github.com/bunnybones1/threejs-light-probe/issues"
+  }
+}

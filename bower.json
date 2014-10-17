@@ -1,0 +1,7 @@
+{
+  "name": "threejs-light-probe",
+  "version": "0.0.1",
+  "devDependencies": {
+    "three.js": "*"
+  }
+}
