@@ -1,7 +1,7 @@
 var onReady = function() {
 	var View = require('threejs-managed-view').View,
 		LightProbe = require('./'),
-		CheckerBoardTexture = require('threejs-texture-checkerboard');
+		CheckerRoom = require('threejs-checkerroom');
 
 	var view = new View({
 		stats: true
@@ -11,6 +11,7 @@ var onReady = function() {
 	//dolly
 	var dolly = new THREE.Object3D();
 	view.scene.add(dolly);
+	// view.camera.position.z = 10;
 	dolly.add(view.camera);
 
 	//lights
@@ -33,37 +34,8 @@ var onReady = function() {
 	lightMesh.position.copy(light.position);
 	view.scene.add(lightMesh);
 
-	var platform = new THREE.Mesh(
-		new THREE.BoxGeometry(32, 2, 32, 1, 1, 1),
-		new THREE.MeshPhongMaterial({
-			map: new CheckerBoardTexture(0x7f7f7f, 0xffffff, 16, 16)
-		})
-	)
-	view.scene.add(platform);
-	platform.position.y = -2;
-	var colors = [
-		[0xff7f7f, 0x7f0000],
-		[0x7fff7f, 0x007f00],
-		[0xffff7f, 0x7f7f00],
-		[0x7f7fff, 0x00007f]
-	]
-	var totalWalls = 4;
-	for (var i = totalWalls - 1; i >= 0; i--) {
-		var ratio = i / totalWalls;
-		var angle = ratio * Math.PI * 2;
-		var wall = new THREE.Mesh(
-			new THREE.BoxGeometry(2, 32, 32, 1, 1, 1),
-			new THREE.MeshPhongMaterial({
-				map: new CheckerBoardTexture(colors[i][0], colors[i][1], 16, 16)
-			})
-		)
-		view.scene.add(wall);
-		wall.position.y = 15;
-		wall.position.x = Math.cos(angle) * 9;
-		wall.position.z = Math.sin(angle) * 9;
-		wall.rotation.y = angle;
-	};
-
+	var checkerRoom = new CheckerRoom();
+	view.scene.add(checkerRoom);
 
 	//test mirror ball
 
@@ -82,7 +54,7 @@ var onReady = function() {
 		var ratio = i / total;
 		var angle = ratio * Math.PI * 2;
 
-		var pos = new THREE.Vector3(Math.cos(angle) * distance, 0, Math.sin(angle) * distance);
+		var pos = new THREE.Vector3(Math.cos(angle) * distance, 1, Math.sin(angle) * distance);
 
 		var lightProbe = new LightProbe();
 		view.scene.add(lightProbe);
@@ -115,6 +87,10 @@ var onReady = function() {
 
 	view.renderManager.onEnterFrame.add(function() {
 		dolly.rotation.y += .005;
+		for (var i = lightProbes.length - 1; i >= 0; i--) {
+			lightProbes[i].update(view.renderer, view.scene);
+		};
+		lightMesh.position.y = 10 * Math.sin((new Date()).getTime() * .001) + 11;
 	})
 
 }

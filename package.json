@@ -12,9 +12,9 @@
   "dependencies": {},
   "devDependencies": {
     "loadandrunscripts": "^1.0.0",
+    "threejs-checkerroom": "^1.0.0",
     "threejs-managed-view": "^1.0.4",
     "threejs-orbitingballs": "^1.0.1",
-    "threejs-texture-checkerboard": "^1.0.0",
     "urlparams": "^1.0.0"
   },
   "scripts": {
