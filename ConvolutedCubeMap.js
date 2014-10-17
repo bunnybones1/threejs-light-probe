@@ -1,15 +1,16 @@
-function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, iterations, type) {
+function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, iterations, flipX, type) {
 	resolution = resolution || 64;
 	this.iterations = iterations || 2;
 	this.blurStrength = blurStrength || .5;
 	type = type || THREE.FloatType;
+	flipX = (flipX === false) ? 1 : -1;
 	this.sourceCubMap = sourceCubMap;
 
 	this.scene = new THREE.Scene();
 
 	this.shader = require('./ConvolutionCubeShader');
 	this.cubeMapToRerender = this.shader.uniforms["tCube"];
-	this.shader.uniforms["tFlip"].value = 1;
+	this.shader.uniforms["tFlip"].value = flipX;
 	this.shader.uniforms["brightness"].value = .16666;
 	this.shader.uniforms["blurStrength"].value = this.blurStrength;
 	this.cubeMapToRerender.value = sourceCubMap;

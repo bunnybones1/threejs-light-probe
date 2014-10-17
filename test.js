@@ -68,7 +68,7 @@ var onReady = function() {
 				// emissive: colors[i-1],
 				// wireframe: true,
 				combine: THREE.AddOperation,
-				envMap : lightProbe.getCubeMap(64, 1 * ratio * ratio * ratio, 3)
+				envMap : lightProbe.getCubeMap(64, 1 * ratio * ratio * ratio, 3, true)
 			})
 		)
 

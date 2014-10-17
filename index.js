@@ -22,8 +22,8 @@ LightProbe.prototype.update = function(renderer, scene) {
 	};
 }
 
-LightProbe.prototype.getCubeMap = function(resolution, blurStrength, iterations) {
-	var convolutedCubeMap = new ConvolutedCubeMap(this.renderTarget, resolution, blurStrength, iterations);
+LightProbe.prototype.getCubeMap = function(resolution, blurStrength, iterations, flipX) {
+	var convolutedCubeMap = new ConvolutedCubeMap(this.renderTarget, resolution, blurStrength, iterations, flipX);
 	this.convolutedCubeMaps.push(convolutedCubeMap);
 	return convolutedCubeMap.cubeMap;
 }
