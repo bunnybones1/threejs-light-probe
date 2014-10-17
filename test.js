@@ -15,7 +15,7 @@ var onReady = function() {
 
 	//lights
 	var light = new THREE.PointLight(0xffffff, .5);
-	light.position.x = 50;
+	light.position.x = 5;
 	light.position.y = 30;
 	view.scene.add(light);
 	var hemisphereLight = new THREE.HemisphereLight(0x7f6f5f, 0x7f0000);
@@ -36,11 +36,33 @@ var onReady = function() {
 	var platform = new THREE.Mesh(
 		new THREE.BoxGeometry(32, 2, 32, 1, 1, 1),
 		new THREE.MeshPhongMaterial({
-			map: new CheckerBoardTexture(0x7f7f7f, 0x00ffff, 16, 16)
+			map: new CheckerBoardTexture(0x7f7f7f, 0xffffff, 16, 16)
 		})
 	)
 	view.scene.add(platform);
 	platform.position.y = -2;
+	var colors = [
+		[0xff7f7f, 0x7f0000],
+		[0x7fff7f, 0x007f00],
+		[0xffff7f, 0x7f7f00],
+		[0x7f7fff, 0x00007f]
+	]
+	var totalWalls = 4;
+	for (var i = totalWalls - 1; i >= 0; i--) {
+		var ratio = i / totalWalls;
+		var angle = ratio * Math.PI * 2;
+		var wall = new THREE.Mesh(
+			new THREE.BoxGeometry(2, 32, 32, 1, 1, 1),
+			new THREE.MeshPhongMaterial({
+				map: new CheckerBoardTexture(colors[i][0], colors[i][1], 16, 16)
+			})
+		)
+		view.scene.add(wall);
+		wall.position.y = 15;
+		wall.position.x = Math.cos(angle) * 9;
+		wall.position.z = Math.sin(angle) * 9;
+		wall.rotation.y = angle;
+	};
 
 
 	//test mirror ball
@@ -69,7 +91,8 @@ var onReady = function() {
 		var mirrorBall = new THREE.Mesh(
 			new THREE.SphereGeometry(1, 32, 16),
 			new THREE.MeshPhongMaterial({
-				color: colors[i-1],
+				// color: colors[i-1],
+				color: new THREE.Color(-.15, -.35, -4),
 				// emissive: colors[i-1],
 				// wireframe: true,
 				combine: THREE.AddOperation,
