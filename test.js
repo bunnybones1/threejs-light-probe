@@ -34,7 +34,7 @@ var onReady = function() {
 	lightMesh.position.copy(light.position);
 	view.scene.add(lightMesh);
 
-	var checkerRoom = new CheckerRoom();
+	var checkerRoom = new CheckerRoom(20, 20, 4);
 	view.scene.add(checkerRoom);
 
 	//test mirror ball
@@ -68,7 +68,7 @@ var onReady = function() {
 				// emissive: colors[i-1],
 				// wireframe: true,
 				combine: THREE.AddOperation,
-				envMap : lightProbe.getCubeMap(64, 1 * ratio * ratio * ratio, 3, true)
+				envMap : lightProbe.getCubeMap(64, 1 * ratio * ratio * ratio, 3, false)
 			})
 		)
 

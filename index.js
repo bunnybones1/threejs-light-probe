@@ -25,6 +25,7 @@ LightProbe.prototype.update = function(renderer, scene) {
 LightProbe.prototype.getCubeMap = function(resolution, blurStrength, iterations, flipX) {
 	var convolutedCubeMap = new ConvolutedCubeMap(this.renderTarget, resolution, blurStrength, iterations, flipX);
 	this.convolutedCubeMaps.push(convolutedCubeMap);
+	convolutedCubeMap.cubeMap.update = convolutedCubeMap.update.bind(convolutedCubeMap);
 	return convolutedCubeMap.cubeMap;
 }
 
