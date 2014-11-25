@@ -1,10 +1,12 @@
-function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, iterations, flipX, type) {
+function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, iterations, flipX, type, prerenderCallback, postrenderCallback) {
 	resolution = resolution || 64;
 	this.iterations = iterations || 2;
 	this.blurStrength = blurStrength || .5;
 	type = type || THREE.FloatType;
 	flipX = (flipX === false) ? 1 : -1;
 	this.sourceCubMap = sourceCubMap;
+	this.prerenderCallback = prerenderCallback;
+	this.postrenderCallback = postrenderCallback;
 
 	this.scene = new THREE.Scene();
 
@@ -37,6 +39,9 @@ function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, iterations, f
 
 ConvolutedCubeMap.prototype = {
 	update: function(renderer) {
+		if(this.prerenderCallback) {
+			this.prerenderCallback();
+		}
 		this.shader.uniforms["blurStrength"].value = this.blurStrength;
 		this.cubeMapToRerender.value = this.sourceCubMap;
 		for (var i = this.iterations; i >= 0; i--) {
@@ -47,6 +52,9 @@ ConvolutedCubeMap.prototype = {
 			this.cubeMapToRerender.value = this.cameraB.renderTarget;
 			this.shader.uniforms["blurStrength"].value *= .6666;
 		};
+		if(this.postrenderCallback) {
+			this.postrenderCallback();
+		}
 	}
 }
 
