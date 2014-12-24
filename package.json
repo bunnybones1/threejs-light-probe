@@ -13,7 +13,7 @@
   "devDependencies": {
     "loadandrunscripts": "^1.0.0",
     "threejs-checkerroom": "^1.0.0",
-    "threejs-managed-view": "^1.0.4",
+    "threejs-managed-view": "^2.4.0",
     "threejs-orbitingballs": "^1.0.1",
     "urlparams": "^1.0.0"
   },
