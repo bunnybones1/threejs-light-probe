@@ -4,11 +4,11 @@ function LightProbe(near, far, resolution, type) {
 	near = near || .01;
 	far = far || 1000;
 	resolution = resolution || 128;
-	this.type = type || THREE.FloatType;
+	this.bufferType = type || THREE.FloatType;
 
-	THREE.CubeCamera.call(this, near, far, resolution, this.type);
+	THREE.CubeCamera.call(this, near, far, resolution, this.bufferType);
 
-	if(this.renderTarget.type !== this.type) console.log("LightProbe: WARNING: This version of three.js does not support Float Type CubeCamera. This is OK, but if you use a patched version of threejs, cubemaps can be HDRI!");
+	if(this.renderTarget.type !== this.bufferType) console.log("LightProbe: WARNING: This version of three.js does not support Float Type CubeCamera. This is OK, but if you use a patched version of threejs, cubemaps can be HDRI!");
 
 	this.convolutedCubeMaps = [];
 }
@@ -25,7 +25,7 @@ LightProbe.prototype.update = function(renderer, scene, updateAllconvolutionCube
 }
 
 LightProbe.prototype.getCubeMap = function(resolution, blurStrength, iterations, flipX, prerenderCallback, postrenderCallback) {
-	var convolutedCubeMap = new ConvolutedCubeMap(this.renderTarget, resolution, blurStrength, iterations, flipX, this.type, prerenderCallback, postrenderCallback);
+	var convolutedCubeMap = new ConvolutedCubeMap(this.renderTarget, resolution, blurStrength, iterations, flipX, this.bufferType, prerenderCallback, postrenderCallback);
 	this.convolutedCubeMaps.push(convolutedCubeMap);
 	convolutedCubeMap.cubeMap.update = convolutedCubeMap.update.bind(convolutedCubeMap);
 	return convolutedCubeMap.cubeMap;
