@@ -22,12 +22,14 @@ var onReady = function() {
 	var hemisphereLight = new THREE.HemisphereLight(0x7f6f5f, 0x7f0000);
 	view.scene.add(hemisphereLight);
 
+	var useFakeHDRI = true;
 	//something to reflect
 	var lightMesh = new THREE.Mesh(
 		new THREE.SphereGeometry(2, 16, 8),
 		new THREE.MeshBasicMaterial({
-			color: new THREE.Color(140, 120, 100),
-			emissive: new THREE.Color(10, 3, 1)
+			color: new THREE.Color(140, 90, 20),
+			emissive: new THREE.Color(1, 1, 1),
+			useFakeHDRI: useFakeHDRI
 		})
 	)
 
@@ -56,7 +58,7 @@ var onReady = function() {
 
 		var pos = new THREE.Vector3(Math.cos(angle) * distance, 1, Math.sin(angle) * distance);
 
-		var lightProbe = new LightProbe();
+		var lightProbe = new LightProbe(undefined, undefined, undefined, useFakeHDRI ? LightProbe.FakeHDRI : THREE.FloatType);
 		view.scene.add(lightProbe);
 		// lightProbe.update(view.renderer, view.scene);
 
@@ -64,9 +66,11 @@ var onReady = function() {
 			new THREE.SphereGeometry(1, 32, 16),
 			new THREE.MeshPhongMaterial({
 				// color: colors[i-1],
-				color: new THREE.Color(-.15, -.35, -4),
+				color: 0x000000,
+				// color: new THREE.Color(-.15, -.35, -4),
 				// emissive: colors[i-1],
 				// wireframe: true,
+				// useFakeHDRI: true,
 				combine: THREE.AddOperation,
 				envMap : lightProbe.getCubeMap(64, 1 * ratio * ratio * ratio, 3, false)
 			})

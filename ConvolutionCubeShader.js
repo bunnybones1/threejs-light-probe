@@ -59,15 +59,36 @@ var ConvolutionCubeShader = {
 
 		"void main() {",
 
-		"	gl_FragColor = textureCube( tCube, vec3( tFlip * vWorldPosition.x, vWorldPosition.yz ) );",
-		"	gl_FragColor += textureCube( tCube, vec3( tFlip * vWorldPosition2.x, vWorldPosition2.yz ) );",
-		"	gl_FragColor += textureCube( tCube, vec3( tFlip * vWorldPosition3.x, vWorldPosition3.yz ) );",
-		"	gl_FragColor += textureCube( tCube, vec3( tFlip * vWorldPosition4.x, vWorldPosition4.yz ) );",
-		"	gl_FragColor += textureCube( tCube, vec3( tFlip * vWorldPosition5.x, vWorldPosition5.yz ) );",
-		"	gl_FragColor += textureCube( tCube, vec3( tFlip * vWorldPosition6.x, vWorldPosition6.yz ) );",
+
+		"	#ifdef USE_FAKE_HDRI",
+		"		vec4 sample1 = textureCube( tCube, vec3( tFlip * vWorldPosition.x, vWorldPosition.yz ) );",
+		"		vec3 tempColor = sample1.rgb * ((1.0 - sample1.a) * 255.0 + 1.0);",
+		// "		gl_FragColor.rgb = sample1.rgb;",
+		"		vec4 sample2 = textureCube( tCube, vec3( tFlip * vWorldPosition2.x, vWorldPosition2.yz ) );",
+		"		tempColor += sample2.rgb * ((1.0 - sample2.a) * 255.0 + 1.0);",
+		"		vec4 sample3 = textureCube( tCube, vec3( tFlip * vWorldPosition3.x, vWorldPosition3.yz ) );",
+		"		tempColor += sample3.rgb * ((1.0 - sample3.a) * 255.0 + 1.0);",
+		"		vec4 sample4 = textureCube( tCube, vec3( tFlip * vWorldPosition4.x, vWorldPosition4.yz ) );",
+		"		tempColor += sample4.rgb * ((1.0 - sample4.a) * 255.0 + 1.0);",
+		"		vec4 sample5 = textureCube( tCube, vec3( tFlip * vWorldPosition6.x, vWorldPosition5.yz ) );",
+		"		tempColor += sample5.rgb * ((1.0 - sample5.a) * 255.0 + 1.0);",
+		"		vec4 sample6 = textureCube( tCube, vec3( tFlip * vWorldPosition6.x, vWorldPosition6.yz ) );",
+		"		tempColor += sample6.rgb * ((1.0 - sample6.a) * 255.0 + 1.0);",
+		"		gl_FragColor.rgb = tempColor;",
+		"	#else",
+		"		gl_FragColor = textureCube( tCube, vec3( tFlip * vWorldPosition.x, vWorldPosition.yz ) );",
+		"		gl_FragColor += textureCube( tCube, vec3( tFlip * vWorldPosition2.x, vWorldPosition2.yz ) );",
+		"		gl_FragColor += textureCube( tCube, vec3( tFlip * vWorldPosition3.x, vWorldPosition3.yz ) );",
+		"		gl_FragColor += textureCube( tCube, vec3( tFlip * vWorldPosition4.x, vWorldPosition4.yz ) );",
+		"		gl_FragColor += textureCube( tCube, vec3( tFlip * vWorldPosition5.x, vWorldPosition5.yz ) );",
+		"		gl_FragColor += textureCube( tCube, vec3( tFlip * vWorldPosition6.x, vWorldPosition6.yz ) );",
+		"	#endif",
 		"	gl_FragColor *= brightness;",
 
 			THREE.ShaderChunk[ "logdepthbuf_fragment" ],
+
+		// "	gl_FragColor.a = 0.0;",
+
 
 		"}"
 
