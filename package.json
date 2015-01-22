@@ -1,6 +1,6 @@
 {
   "name": "threejs-light-probe",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "A convenient camera probe to generate cubemaps for reflections during runtime.",
   "main": "index.js",
   "license": "MIT",
