@@ -69,7 +69,6 @@ ConvolutedCubeMap.prototype = {
 		if(this.prerenderCallback) {
 			this.prerenderCallback();
 		}
-		console.log('b', this.uniforms.brightness.value);
 		this.uniforms["blurStrength"].value = this.blurStrength;
 		this.cubeMapToRerender.value = this.sourceCubMap;
 		this.mesh.material = this.material;
