@@ -42,12 +42,10 @@ LightProbe.prototype.update = function(renderer, scene, updateAllconvolutionCube
 	}
 }
 
-LightProbe.prototype.getCubeMap = function(resolution, blurStrength, iterations, flipX, prerenderCallback, postrenderCallback) {
-	var convolutedCubeMap = new ConvolutedCubeMap(this.renderTarget, resolution, blurStrength, iterations, flipX, this.bufferType, prerenderCallback, postrenderCallback);
+LightProbe.prototype.getCubeMapGenerator = function(resolution, blurStrength, brightness, iterations, flipX, prerenderCallback, postrenderCallback) {
+	var convolutedCubeMap = new ConvolutedCubeMap(this.renderTarget, resolution, blurStrength, brightness, iterations, flipX, this.bufferType, prerenderCallback, postrenderCallback);
 	this.convolutedCubeMaps.push(convolutedCubeMap);
-	convolutedCubeMap.cubeMap.convoluter = convolutedCubeMap;
-	convolutedCubeMap.cubeMap.update = convolutedCubeMap.update.bind(convolutedCubeMap);
-	return convolutedCubeMap.cubeMap;
+	return convolutedCubeMap;
 }
 
 LightProbe.FakeHDRI = ConvolutedCubeMap.FakeHDRI;

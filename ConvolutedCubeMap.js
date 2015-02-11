@@ -1,9 +1,11 @@
 var upgradeFragmentShaderToHaveFakeHDRIOutput = require('./upgradeFragmentShaderToHaveFakeHDRIOutput');
+var _ = require('lodash');
 
-function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, iterations, flipX, type, prerenderCallback, postrenderCallback) {
+function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, brightness, iterations, flipX, type, prerenderCallback, postrenderCallback) {
 	resolution = resolution || 64;
 	this.iterations = iterations || 2;
 	this.blurStrength = blurStrength || .5;
+	this.brightness = brightness || 1;
 	type = type || THREE.FloatType;
 	var format, useFakeHDRI;
 	if(type == ConvolutedCubeMap.FakeHDRI) {
@@ -21,16 +23,18 @@ function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, iterations, f
 
 	this.shader = require('./ConvolutionCubeShader');
 	var fragmentShader = upgradeFragmentShaderToHaveFakeHDRIOutput(this.shader.fragmentShader);
-	this.cubeMapToRerender = this.shader.uniforms["tCube"];
-	this.shader.uniforms["tFlip"].value = flipX;
-	this.shader.uniforms["brightness"].value = .16666;
-	this.shader.uniforms["blurStrength"].value = this.blurStrength;
+	var uniforms = this.uniforms = _.cloneDeep(this.shader.uniforms); //clone uniforms for this instance
+
+	this.cubeMapToRerender = uniforms["tCube"];
+	uniforms["tFlip"].value = flipX;
+	uniforms["brightness"].value = .16666 * this.brightness;
+	uniforms["blurStrength"].value = this.blurStrength;
 	this.cubeMapToRerender.value = sourceCubMap;
 
 	var material = this.material = new THREE.ShaderMaterial( {
 		fragmentShader: fragmentShader,
 		vertexShader: this.shader.vertexShader,
-		uniforms: this.shader.uniforms,
+		uniforms: uniforms,
 		depthWrite: false,
 		side: THREE.BackSide,
 		defines: useFakeHDRI ? {
@@ -41,7 +45,7 @@ function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, iterations, f
 	var material2 = this.material2 = new THREE.ShaderMaterial( {
 		fragmentShader: this.shader.fragmentShader,
 		vertexShader: this.shader.vertexShader,
-		uniforms: this.shader.uniforms,
+		uniforms: uniforms,
 		depthWrite: false,
 		side: THREE.BackSide,
 		defines: useFakeHDRI ? {
@@ -65,21 +69,26 @@ ConvolutedCubeMap.prototype = {
 		if(this.prerenderCallback) {
 			this.prerenderCallback();
 		}
-		this.shader.uniforms["blurStrength"].value = this.blurStrength;
+		console.log('b', this.uniforms.brightness.value);
+		this.uniforms["blurStrength"].value = this.blurStrength;
 		this.cubeMapToRerender.value = this.sourceCubMap;
 		this.mesh.material = this.material;
 		for (var i = this.iterations; i >= 0; i--) {
 			this.cameraA.updateCubeMap(renderer, this.scene);
 			this.cubeMapToRerender.value = this.cameraA.renderTarget;
-			this.shader.uniforms["blurStrength"].value *= .6666;
+			this.uniforms["blurStrength"].value *= .6666;
 			if(this.useFakeHDRI && i == 0) this.mesh.material = this.material2;
 			this.cameraB.updateCubeMap(renderer, this.scene);
 			this.cubeMapToRerender.value = this.cameraB.renderTarget;
-			this.shader.uniforms["blurStrength"].value *= .6666;
+			this.uniforms["blurStrength"].value *= .6666;
 		};
 		if(this.postrenderCallback) {
 			this.postrenderCallback();
 		}
+	},
+	setBrightness: function(val) {
+		this.brightness = val;
+		this.uniforms.brightness.value = .16666 * this.brightness;
 	}
 }
 
