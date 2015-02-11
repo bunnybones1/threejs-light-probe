@@ -72,7 +72,7 @@ var onReady = function() {
 				// wireframe: true,
 				// useFakeHDRI: true,
 				combine: THREE.AddOperation,
-				envMap : lightProbe.getCubeMap(64, 1 * ratio * ratio * ratio, 3, false)
+				envMap : lightProbe.getCubeMapGenerator(64, 1 * ratio * ratio * ratio, 1, 3, false).cubeMap
 			})
 		)
 

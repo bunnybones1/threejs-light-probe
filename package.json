@@ -9,7 +9,9 @@
     "email": "oz@bunnybones.com",
     "url": "https://github.com/bunnybones1"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "^3.1.0"
+  },
   "devDependencies": {
     "loadandrunscripts": "^1.0.0",
     "threejs-checkerroom": "^1.0.0",
