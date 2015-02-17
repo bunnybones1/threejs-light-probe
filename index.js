@@ -20,7 +20,7 @@ function LightProbe(near, far, resolution, type) {
 	resolution = resolution || 128;
 	this.bufferType = type;
 	var format;
-	if(type == ConvolutedCubeMap.FakeHDRI) {
+	if(type === ConvolutedCubeMap.FakeHDRI || type === ConvolutedCubeMap.FakeHDRIThrough) {
 		type = THREE.UnsignedByteType;
 		format = THREE.RGBAFormat;
 	}
@@ -49,5 +49,6 @@ LightProbe.prototype.getCubeMapGenerator = function(resolution, blurStrength, br
 }
 
 LightProbe.FakeHDRI = ConvolutedCubeMap.FakeHDRI;
+LightProbe.FakeHDRIThrough = ConvolutedCubeMap.FakeHDRIThrough;
 
 module.exports = LightProbe;

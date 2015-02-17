@@ -8,8 +8,11 @@ function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, brightness, i
 	this.brightness = brightness || 1;
 	type = type || THREE.FloatType;
 	var format, useFakeHDRI;
-	if(type == ConvolutedCubeMap.FakeHDRI) {
+	var useFakeHDRIThrough = false;
+	if(type === ConvolutedCubeMap.FakeHDRI || type === ConvolutedCubeMap.FakeHDRIThrough) {
 		useFakeHDRI = true;
+		useFakeHDRIThrough = type === ConvolutedCubeMap.FakeHDRIThrough;
+
 		type = THREE.UnsignedByteType;
 		format = THREE.RGBAFormat;
 	}
@@ -42,17 +45,22 @@ function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, brightness, i
 		} : {},
 		// transparent: true
 	} );
-	var material2 = this.material2 = new THREE.ShaderMaterial( {
-		fragmentShader: this.shader.fragmentShader,
-		vertexShader: this.shader.vertexShader,
-		uniforms: uniforms,
-		depthWrite: false,
-		side: THREE.BackSide,
-		defines: useFakeHDRI ? {
-			USE_FAKE_HDRI: true
-		} : {},
-		// transparent: true
-	} );
+	var material2;
+	if(useFakeHDRIThrough) {
+		material2 = this.material2 = material;
+	} else {
+		material2 = this.material2 = new THREE.ShaderMaterial( {
+			fragmentShader: this.shader.fragmentShader,
+			vertexShader: this.shader.vertexShader,
+			uniforms: uniforms,
+			depthWrite: false,
+			side: THREE.BackSide,
+			defines: useFakeHDRI ? {
+				USE_FAKE_HDRI: true
+			} : {},
+			// transparent: true
+		});
+	}
 
 	this.mesh = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), material );
 	this.scene.add( this.mesh );
@@ -92,5 +100,6 @@ ConvolutedCubeMap.prototype = {
 }
 
 ConvolutedCubeMap.FakeHDRI = 10090;
+ConvolutedCubeMap.FakeHDRIThrough = 10091;
 
 module.exports = ConvolutedCubeMap;
