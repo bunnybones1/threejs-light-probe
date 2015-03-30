@@ -1,5 +1,5 @@
 var upgradeFragmentShaderToHaveFakeHDRIOutput = require('./upgradeFragmentShaderToHaveFakeHDRIOutput');
-var _ = require('lodash');
+var cloneDeep = require('lodash.clonedeep');
 
 function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, brightness, iterations, flipX, type, prerenderCallback, postrenderCallback) {
 	resolution = resolution || 64;
@@ -26,7 +26,7 @@ function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, brightness, i
 
 	this.shader = require('./ConvolutionCubeShader');
 	var fragmentShader = upgradeFragmentShaderToHaveFakeHDRIOutput(this.shader.fragmentShader);
-	var uniforms = this.uniforms = _.cloneDeep(this.shader.uniforms); //clone uniforms for this instance
+	var uniforms = this.uniforms = cloneDeep(this.shader.uniforms); //clone uniforms for this instance
 
 	this.cubeMapToRerender = uniforms["tCube"];
 	uniforms["tFlip"].value = flipX;
