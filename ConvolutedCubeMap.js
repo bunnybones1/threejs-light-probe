@@ -1,4 +1,4 @@
-var upgradeFragmentShaderToHaveFakeHDRIOutput = require('./upgradeFragmentShaderToHaveFakeHDRIOutput');
+var upgradeFragmentShaderToHaveFakeHDRIOutput = require('./upgradeFragmentShaderToHaveFakeHdriOutput');
 var cloneDeep = require('lodash.clonedeep');
 
 function ConvolutedCubeMap(sourceCubMap, resolution, blurStrength, brightness, iterations, flipX, type, prerenderCallback, postrenderCallback) {
