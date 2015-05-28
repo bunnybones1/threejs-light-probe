@@ -42,6 +42,16 @@ LightProbe.prototype.update = function(renderer, scene, updateAllconvolutionCube
 	}
 }
 
+LightProbe.prototype.updateManual = function(renderer, renderTarget, updateAllconvolutionCubeMaps) {
+	this.renderTarget = renderTarget;
+	if(updateAllconvolutionCubeMaps !== false) {
+		for (var i = this.convolutedCubeMaps.length - 1; i >= 0; i--) {
+			this.convolutedCubeMaps[i].sourceCubMap = renderTarget;
+			this.convolutedCubeMaps[i].update(renderer);
+		};
+	}
+}
+
 LightProbe.prototype.getCubeMapGenerator = function(resolution, blurStrength, brightness, iterations, flipX, prerenderCallback, postrenderCallback) {
 	var convolutedCubeMap = new ConvolutedCubeMap(this.renderTarget, resolution, blurStrength, brightness, iterations, flipX, this.bufferType, prerenderCallback, postrenderCallback);
 	this.convolutedCubeMaps.push(convolutedCubeMap);
